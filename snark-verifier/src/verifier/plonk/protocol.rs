@@ -16,6 +16,21 @@ use std::{
     ops::{Add, Mul, Neg, Sub},
 };
 
+/// Domain parameters to be optionally loaded as witnesses
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct DomainAsWitness<C, L>
+where
+    C: CurveAffine,
+    L: Loader<C>,
+{
+    /// Number of rows in the domain
+    pub n: L::LoadedScalar,
+    /// Generator of the domain
+    pub gen: L::LoadedScalar,
+    /// Inverse generator of the domain
+    pub gen_inv: L::LoadedScalar,
+}
+
 /// Protocol specifying configuration of a PLONK.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PlonkProtocol<C, L = NativeLoader>
@@ -29,6 +44,15 @@ where
     ))]
     /// Working domain.
     pub domain: Domain<C::Scalar>,
+
+    #[serde(bound(
+        serialize = "L::LoadedScalar: Serialize",
+        deserialize = "L::LoadedScalar: Deserialize<'de>"
+    ))]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    /// Optional: load `domain.n` and `domain.gen` as a witness
+    pub domain_as_witness: Option<DomainAsWitness<C, L>>,
+
     #[serde(bound(
         serialize = "L::LoadedEcPoint: Serialize",
         deserialize = "L::LoadedEcPoint: Deserialize<'de>"
@@ -115,6 +139,7 @@ where
             .map(|transcript_initial_state| loader.load_const(transcript_initial_state));
         PlonkProtocol {
             domain: self.domain.clone(),
+            domain_as_witness: None,
             preprocessed,
             num_instance: self.num_instance.clone(),
             num_witness: self.num_witness.clone(),
@@ -161,6 +186,7 @@ mod halo2 {
                 .map(|transcript_initial_state| loader.assign_scalar(*transcript_initial_state));
             PlonkProtocol {
                 domain: self.domain.clone(),
+                domain_as_witness: None,
                 preprocessed,
                 num_instance: self.num_instance.clone(),
                 num_witness: self.num_witness.clone(),
