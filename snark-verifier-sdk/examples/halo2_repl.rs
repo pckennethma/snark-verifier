@@ -7,8 +7,8 @@ use halo2_base::gates::builder::{
 use halo2_base::gates::flex_gate::GateStrategy;
 use halo2_base::halo2_proofs;
 use halo2_base::halo2_proofs::arithmetic::Field;
-use halo2_base::halo2_proofs::halo2curves::bn256::{Fr, G1Affine, Bn256};
-use halo2_base::halo2_proofs::plonk::{VerifyingKey, verify_proof};
+use halo2_base::halo2_proofs::halo2curves::bn256::{Bn256, Fr, G1Affine};
+use halo2_base::halo2_proofs::plonk::{verify_proof, VerifyingKey};
 use halo2_base::halo2_proofs::poly::commitment::{Params, ParamsProver};
 use halo2_base::halo2_proofs::poly::kzg::commitment::KZGCommitmentScheme;
 use halo2_base::halo2_proofs::poly::kzg::multiopen::VerifierSHPLONK;
@@ -20,13 +20,13 @@ use rand::rngs::StdRng;
 use rand::SeedableRng;
 use snark_verifier::util::arithmetic::PrimeField;
 // use snark_verifier_sdk::halo2::aggregation::{AggregationConfigParams, VerifierUniversality};
-use snark_verifier_sdk::{SHPLONK, NativeLoader};
 use snark_verifier_sdk::halo2::PoseidonTranscript;
 use snark_verifier_sdk::{
     gen_pk,
     halo2::{aggregation::AggregationCircuit, gen_snark_shplonk},
     Snark,
 };
+use snark_verifier_sdk::{NativeLoader, SHPLONK};
 
 fn read_halo2_repl_snark(path: &str) -> Snark {
     let mut file = File::open(path).expect("File open error");
@@ -47,11 +47,8 @@ fn read_halo2_repl_snark(path: &str) -> Snark {
 }
 
 fn read_vk(path: &str) -> VerifyingKey<G1Affine> {
-    let mut file = File::open(path).expect("File open error");
-    let mut raw_vk = Vec::new();
-    file.read_to_end(&mut raw_vk).expect("File read error");
-
-    let vk_reader = &mut BufReader::new(raw_vk.as_slice());
+    let file = File::open(path).expect("File open error");
+    let mut vk_reader = BufReader::new(file);
     let params = BaseConfigParams {
         strategy: GateStrategy::Vertical,
         num_advice_per_phase: vec![4, 0, 0],
@@ -60,24 +57,22 @@ fn read_vk(path: &str) -> VerifyingKey<G1Affine> {
         k: 14,
         lookup_bits: Some(8),
     };
-    let vk =
-        VerifyingKey::<G1Affine>::read::<BufReader<&[u8]>, RangeWithInstanceCircuitBuilder<Fr>>(
-            vk_reader,
-            halo2_base::halo2_proofs::SerdeFormat::RawBytesUnchecked,
-            params,
-        )
-        .expect("VerifyingKey read error");
+    let vk = VerifyingKey::<G1Affine>::read::<_, RangeWithInstanceCircuitBuilder<Fr>>(
+        &mut vk_reader,
+        halo2_base::halo2_proofs::SerdeFormat::RawBytesUnchecked,
+        params,
+    )
+    .expect("VerifyingKey read error");
     vk
 }
 
 fn main() {
     let k = 14;
-    let snark = read_halo2_repl_snark("./halo2repl.snark");
-    let vk = read_vk("./halo2repl.vk");
+    let snark = read_halo2_repl_snark("./examples/halo2repl.snark");
+    let vk = read_vk("./examples/halo2repl.vk");
 
     let params = gen_srs(k);
 
-    let verifier_params = params.verifier_params();
     let strategy = SingleStrategy::new(&params);
     let mut transcript = PoseidonTranscript::<NativeLoader, &[u8]>::new::<0>(&snark.proof[..]);
     let instance = &snark.instances[0][..];
@@ -87,6 +82,6 @@ fn main() {
         _,
         _,
         SingleStrategy<'_, Bn256>,
-    >(verifier_params, &vk, strategy, &[&[instance]], &mut transcript)
+    >(&params, &vk, strategy, &[&[instance]], &mut transcript)
     .unwrap();
 }

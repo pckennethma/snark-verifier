@@ -517,10 +517,6 @@ impl<F: ScalarField> CircuitExt<F> for RangeWithInstanceCircuitBuilder<F> {
     fn instances(&self) -> Vec<Vec<F>> {
         vec![self.instance()]
     }
-
-    fn selectors(config: &Self::Config) -> Vec<Selector> {
-        config.base.gate().basic_gates[0].iter().map(|gate| gate.q_enable).collect()
-    }
 }
 
 impl Circuit<Fr> for AggregationCircuit {
