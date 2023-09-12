@@ -480,8 +480,9 @@ impl<F: ScalarField> CircuitExt<F> for BaseCircuitBuilder<F> {
             .collect()
     }
 
-    fn selectors(config: &Self::Config) -> Vec<Selector> {
-        config.gate().basic_gates[0].iter().map(|gate| gate.q_enable).collect()
+    fn selectors(_config: &Self::Config) -> Vec<Selector> {
+        vec![]
+        // config.gate().basic_gates[0].iter().map(|gate| gate.q_enable).collect()
     }
 }
 
