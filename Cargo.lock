@@ -1126,9 +1126,7 @@ dependencies = [
 
 [[package]]
 name = "halo2-axiom"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1d7b1243109adf85c716fa33dafb3c602694358821a0a1326a62f160d85600d"
+version = "0.5.0-alpha.0"
 dependencies = [
  "blake2b_simd",
  "crossbeam",
@@ -1136,10 +1134,12 @@ dependencies = [
  "group",
  "halo2curves-axiom",
  "itertools 0.11.0",
+ "log",
  "maybe-rayon",
  "pairing",
  "rand",
  "rand_core",
+ "rayon",
  "rustc-hash",
  "sha3 0.10.8",
  "tracing",
@@ -3320,7 +3320,3 @@ dependencies = [
  "quote",
  "syn 2.0.48",
 ]
-
-[[patch.unused]]
-name = "halo2-axiom"
-version = "0.5.0-alpha.0"
