@@ -1,7 +1,13 @@
 [package]
 name = "snark-verifier-sdk"
 version = "0.1.6"
+authors = ["Privacy Scaling Explorations Team", "Intrinsic Technologies"]
+license = "MIT"
 edition = "2021"
+repository = "https://github.com/axiom-crypto/snark-verifier"
+readme = "../README.md"
+description = "SDK for using snark-verifier."
+rust-version = "1.73.0"
 autobenches = false
 
 [dependencies]
