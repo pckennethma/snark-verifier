@@ -369,28 +369,12 @@ dependencies = [
 
 [[package]]
 name = "block-buffer"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4152116fd6e9dadb291ae18fc1ec3575ed6d84c29642d97890f4b4a3417297e4"
-dependencies = [
- "block-padding",
- "generic-array",
-]
-
-[[package]]
-name = "block-buffer"
 version = "0.10.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
 dependencies = [
  "generic-array",
 ]
-
-[[package]]
-name = "block-padding"
-version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d696c370c750c948ada61c69a0ee2cbbb9c50b1019ddb86d9317157a99c2cae"
 
 [[package]]
 name = "blst"
@@ -912,7 +896,7 @@ version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
 dependencies = [
- "block-buffer 0.10.4",
+ "block-buffer",
  "const-oid",
  "crypto-common",
  "subtle",
@@ -1135,20 +1119,40 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eabb4a44450da02c90444cf74558da904edde8fb4e9035a9a6a4e15445af0bd7"
 
 [[package]]
+name = "halo2-axiom"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "caa28f319d49a0c23297d7c6792528dc31a7f2fc7d6b13a8d54836bf2a2c08c5"
+dependencies = [
+ "blake2b_simd",
+ "crossbeam",
+ "ff",
+ "group",
+ "halo2curves-axiom",
+ "maybe-rayon",
+ "pairing",
+ "rand",
+ "rand_core",
+ "rustc-hash",
+ "sha3",
+ "tracing",
+]
+
+[[package]]
 name = "halo2-base"
 version = "0.4.0"
-source = "git+https://github.com/axiom-crypto/halo2-lib.git?branch=release-0.4.0-rc#67e3a0eee37c3b25b393cdea7514fef4e8af0bf9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b5eeb378fa79d4904b626da0c08dcafd974e8194928c73cdccdcdd00796441a8"
 dependencies = [
  "getset",
- "halo2_proofs 0.2.0",
- "halo2_proofs 0.2.0 (git+https://github.com/privacy-scaling-explorations/halo2.git?rev=7a21656)",
+ "halo2-axiom",
  "itertools 0.11.0",
  "jemallocator",
  "log",
  "num-bigint",
  "num-integer",
  "num-traits",
- "poseidon-rs",
+ "poseidon-primitives",
  "rand_chacha",
  "rayon",
  "rustc-hash",
@@ -1159,7 +1163,8 @@ dependencies = [
 [[package]]
 name = "halo2-ecc"
 version = "0.4.0"
-source = "git+https://github.com/axiom-crypto/halo2-lib.git?branch=release-0.4.0-rc#67e3a0eee37c3b25b393cdea7514fef4e8af0bf9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09cfe18bc332c7b2b50100442ed0dd24dea87d1ca16a4eb8912d0875960b0176"
 dependencies = [
  "halo2-base",
  "itertools 0.10.5",
@@ -1176,63 +1181,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "halo2_proofs"
-version = "0.2.0"
-dependencies = [
- "blake2b_simd",
- "crossbeam",
- "ff",
- "group",
- "halo2curves 0.4.0",
- "maybe-rayon",
- "pairing",
- "rand",
- "rand_core",
- "rustc-hash",
- "sha3 0.10.8",
- "tracing",
-]
-
-[[package]]
-name = "halo2_proofs"
-version = "0.2.0"
-source = "git+https://github.com/privacy-scaling-explorations/halo2.git?rev=7a21656#7a2165617195d8baa422ca7b2b364cef02380390"
-dependencies = [
- "blake2b_simd",
- "ff",
- "group",
- "halo2curves 0.1.0",
- "maybe-rayon",
- "rand_chacha",
- "rand_core",
- "sha3 0.9.1",
- "tracing",
-]
-
-[[package]]
-name = "halo2curves"
-version = "0.1.0"
+name = "halo2curves-axiom"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6b1142bd1059aacde1b477e0c80c142910f1ceae67fc619311d6a17428007ab"
-dependencies = [
- "blake2b_simd",
- "ff",
- "group",
- "lazy_static",
- "num-bigint",
- "num-traits",
- "pasta_curves",
- "paste",
- "rand",
- "rand_core",
- "static_assertions",
- "subtle",
-]
-
-[[package]]
-name = "halo2curves"
-version = "0.4.0"
-source = "git+https://github.com/axiom-crypto/halo2curves.git?branch=main#e185711b6ba8f3e22f2af8bf24a5fc84b781ca46"
+checksum = "8d47eaec6a3040c2fbaa020716bf571b0c55025126242510f774183aff84b92e"
 dependencies = [
  "blake2b_simd",
  "ff",
@@ -1764,12 +1716,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0ab1bc2a289d34bd04a330323ac98a1b4bc82c9d9fcb1e66b63caa84da26b575"
 
 [[package]]
-name = "opaque-debug"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
-
-[[package]]
 name = "pairing"
 version = "0.23.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1910,9 +1856,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "poseidon-rs"
+name = "poseidon-primitives"
 version = "0.1.1"
-source = "git+https://github.com/axiom-crypto/poseidon-circuit.git?rev=1aee4a1#1aee4a1bf6220578924079aac4f2eee3874116a1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bd95570f7ea849b4187298b5bb229643e44e1d47ddf3979d0db8a1c28be26a8"
 dependencies = [
  "bitvec",
  "ff",
@@ -2517,18 +2464,6 @@ dependencies = [
 
 [[package]]
 name = "sha3"
-version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f81199417d4e5de3f04b1e871023acea7389672c4135918f05aa9cbf2f2fa809"
-dependencies = [
- "block-buffer 0.9.0",
- "digest 0.9.0",
- "keccak",
- "opaque-debug",
-]
-
-[[package]]
-name = "sha3"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "75872d278a8f37ef87fa0ddbda7802605cb18344497949862c0d4dcb291eba60"
@@ -2622,7 +2557,7 @@ dependencies = [
  "ruint",
  "serde",
  "serde_json",
- "sha3 0.10.8",
+ "sha3",
 ]
 
 [[package]]
