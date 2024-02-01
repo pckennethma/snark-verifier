@@ -1,6 +1,6 @@
 [package]
 name = "snark-verifier-sdk"
-version = "0.1.7"
+version = "0.2.0-alpha.0"
 authors = ["Privacy Scaling Explorations Team", "Intrinsic Technologies"]
 license = "MIT"
 edition = "2021"
