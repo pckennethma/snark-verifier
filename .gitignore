@@ -8,3 +8,4 @@ testdata
 params
 agg.pk
 break_points.json
+Cargo.lock

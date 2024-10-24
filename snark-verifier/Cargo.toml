@@ -29,7 +29,7 @@ halo2-base = { git = "https://github.com/axiom-crypto/halo2-lib.git", branch = "
 halo2-ecc = { git = "https://github.com/axiom-crypto/halo2-lib.git", branch = "community-edition", default-features = false, optional = true }
 
 # parallel
-rayon = { version = "1.8", optional = true }
+rayon = { version = "^1.6.1", optional = true }
 
 # loader_evm
 sha3 = { version = "=0.10", optional = true }
